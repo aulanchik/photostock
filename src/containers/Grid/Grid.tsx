@@ -1,16 +1,24 @@
-import React, { useState, useImperativeHandle } from "react";
+import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
 import { useFetchFirebase } from "@/hooks/useFetchFirebase";
 import { Preview } from "@/components";
 import { motion } from "framer-motion";
 import "./Grid.scss";
 
-const Grid = React.forwardRef((props, ref): JSX.Element => {
+export interface GridHandle {
+  fetchImages: () => void;
+}
+
+const Grid = forwardRef<GridHandle, {}>((_, ref) => {
   const { images, loading, fetchImages } = useFetchFirebase();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useImperativeHandle(ref, () => ({
     fetchImages,
   }));
+
+  useEffect(() => {
+    fetchImages();
+  }, [fetchImages]);
 
   const renderImages = () =>
     images.map((url: string, index: number) => (

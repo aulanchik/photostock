@@ -17,6 +17,7 @@ export const useUploadFirebase = (
     uploadTask.on(
       "state_changed",
       (snapshot) => {
+        setIsUploading(true);
         const currentProgress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setProgress(currentProgress);
@@ -35,5 +36,5 @@ export const useUploadFirebase = (
     );
   };
 
-  return { progress, error, uploadFile };
+  return { progress, error, uploadFile, isUploading };
 };
