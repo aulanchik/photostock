@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { FC, useState, useRef, ChangeEvent } from "react";
 import { useUploadFirebase } from "@/hooks/useUploadFirebase";
 import { MdUploadFile } from "react-icons/md";
 import { motion } from "framer-motion";
@@ -8,9 +8,10 @@ interface ImageUploadProps {
   onUploadComplete: () => void;
 }
 
-const Upload: React.FC<ImageUploadProps> = ({ onUploadComplete }) => {
+const Upload: FC<ImageUploadProps> = ({ onUploadComplete }) => {
   const [file, setFile] = useState<File | null>(null);
   const { uploadFile, progress, error } = useUploadFirebase(onUploadComplete);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const allowedFileTypes = Array.of("image/jpeg", "image/jpg", "image/png");
 
@@ -18,10 +19,13 @@ const Upload: React.FC<ImageUploadProps> = ({ onUploadComplete }) => {
     if (file) {
       uploadFile(file);
       setFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
 
     if (selectedFile && allowedFileTypes.includes(selectedFile.type)) {
@@ -35,6 +39,7 @@ const Upload: React.FC<ImageUploadProps> = ({ onUploadComplete }) => {
         <input
           id="files"
           type="file"
+          ref={fileInputRef}
           className="upload__input"
           onChange={handleFileChange}
           accept={allowedFileTypes.toString()}
