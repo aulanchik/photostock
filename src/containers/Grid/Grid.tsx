@@ -1,5 +1,5 @@
-import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
-import { useFetchFirebase } from "@/hooks/useFetchFirebase";
+import { useState, useEffect, useImperativeHandle, forwardRef, useCallback } from "react";
+import { useFetch } from "@/hooks/useFetch";
 import { Preview } from "@/components";
 import { motion } from "framer-motion";
 import "./Grid.scss";
@@ -9,21 +9,25 @@ export interface GridHandle {
 }
 
 const Grid = forwardRef<GridHandle, {}>((_, ref) => {
-  const { images, loading, fetchImages } = useFetchFirebase();
+  const { images, loading, fetchImages } = useFetch();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+  const stableFetchImages = useCallback(() => {
+    fetchImages();
+  }, [fetchImages]);
+
   useImperativeHandle(ref, () => ({
-    fetchImages,
+    fetchImages: stableFetchImages,
   }));
 
   useEffect(() => {
-    fetchImages();
-  }, [fetchImages]);
+    stableFetchImages();
+  }, []);
 
   const renderImages = () =>
     images.map((url: string, index: number) => (
       <motion.div
-        key={index}
+        key={url}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="grid__thumbnail"
@@ -48,5 +52,7 @@ const Grid = forwardRef<GridHandle, {}>((_, ref) => {
     </>
   );
 });
+
+Grid.displayName = "Grid";
 
 export default Grid;

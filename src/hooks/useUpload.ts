@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "@/firebase";
 
-export const useUploadFirebase = (
+export const useUpload = (
   onUploadComplete: () => void,
   path: string = "",
 ) => {
