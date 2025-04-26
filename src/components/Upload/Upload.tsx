@@ -1,5 +1,5 @@
 import { FC, useState, useRef, ChangeEvent } from "react";
-import { useUploadFirebase } from "@/hooks/useUploadFirebase";
+import { useUpload } from "@/hooks/useUpload";
 import { MdUploadFile } from "react-icons/md";
 import { motion } from "framer-motion";
 import "./Upload.scss";
@@ -10,7 +10,7 @@ interface ImageUploadProps {
 
 const Upload: FC<ImageUploadProps> = ({ onUploadComplete }) => {
   const [file, setFile] = useState<File | null>(null);
-  const { uploadFile, progress, error } = useUploadFirebase(onUploadComplete);
+  const { uploadFile, progress, error } = useUpload(onUploadComplete);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const allowedFileTypes = Array.of("image/jpeg", "image/jpg", "image/png");
