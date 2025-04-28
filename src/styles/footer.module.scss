@@ -1,0 +1,23 @@
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1em;
+}
+
+.footerText {
+    margin: 8px 0;
+    font-size: 0.975rem;
+
+    a {
+        color: #007bff;
+        text-decoration: none;
+        margin-left: 5px;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

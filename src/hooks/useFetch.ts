@@ -1,44 +1,36 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
-import { storage } from "@/firebase";
+import { storage } from "@/firebase/client";
 
 export const useFetch = (path: string = "") => {
-  const [images, setImages] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+    const [images, setImages] = useState<string[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
-  const fetchImages = async () => {
-    setLoading(true);
-    setError(null);
-    const storageRef = ref(storage, path);
+    const fetchImages = useCallback(async () => {
+        setLoading(true);
+        setError(null);
 
-    try {
-      const result = await listAll(storageRef);
-      const imagesPromise = result.items.map((itemRef) => {
-        return getDownloadURL(itemRef);
+        try {
+            const storageRef = ref(storage, path);
+            const result = await listAll(storageRef);
 
-      });
-      const urls = await Promise.allSettled(imagesPromise);
+            const urls = await Promise.all(
+                result.items.map((itemRef) => getDownloadURL(itemRef))
+            );
 
-      const validUrls: Array<string> = urls
-        .filter((result) => result.status === "fulfilled")
-        .map((result) => (result as PromiseFulfilledResult<string>).value);
+            setImages(urls);
+        } catch (err) {
+            console.error((err as Error).message);
+            setError((err as Error).message);
+        } finally {
+            setLoading(false);
+        }
+    }, [path]);
 
-      setImages(validUrls);
+    useEffect(() => {
+        fetchImages();
+    }, [fetchImages]);
 
-    } catch (err) {
-      setError("Failed to load images. Please try again later.");
-    } finally {
-      setLoading(false);
-
-    }
-
-  };
-
-  useEffect(() => {
-    fetchImages();
-
-  }, [path]);
-
-  return { images, loading, error, fetchImages };
+    return { images, loading, error, fetchImages };
 };

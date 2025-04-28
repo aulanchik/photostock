@@ -1,21 +1,24 @@
-import React, { useCallback, useRef } from "react";
-import { Upload, Header, Footer } from "@/components";
-import { Grid } from "@/containers";
+import { FC } from "react";
+import Grid from "@/components/grid";
+import Header from "@/components/header";
+import UploadDialog from "@/components/upload";
+import Footer from "@/components/footer";
+import { useFetch } from "@/hooks/useFetch";
 
-const App: React.FC = (): JSX.Element => {
-  const gridRef = useRef<{ fetchImages: () => void }>(null);
+const App: FC = (): JSX.Element => {
+  const { images, loading, error, fetchImages } = useFetch();
 
-  const handleUploadComplete = useCallback(() => {
-    gridRef.current?.fetchImages();
-  }, []);
+  const handleUploadComplete = () => {
+    fetchImages();
+  };
 
   return (
-    <main>
+    <>
       <Header />
-      <Upload onUploadComplete={handleUploadComplete} />
-      <Grid ref={gridRef} />
+      <UploadDialog onUploadComplete={handleUploadComplete} />
+      <Grid images={images} loading={loading} error={error} />
       <Footer />
-    </main>
+    </>
   );
 };
 

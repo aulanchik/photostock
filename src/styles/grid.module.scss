@@ -1,0 +1,33 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-auto-rows: 350px;
+    padding: 1em;
+    gap: 1em;
+
+    & .imageContainer {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+        & .image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease-in-out;
+
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
+    }
+
+    & .loader,
+    & .error {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #666;
+        margin: 20px 0;
+    }
+}
