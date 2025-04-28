@@ -6,20 +6,20 @@ import Footer from "@/components/footer";
 import { useFetch } from "@/hooks/useFetch";
 
 const App: FC = (): JSX.Element => {
-    const { images, loading, error, fetchImages } = useFetch();
+  const { images, loading, error, fetchImages } = useFetch();
 
-    const handleUploadComplete = () => {
-        fetchImages();
-    };
+  const handleUploadComplete = () => {
+    fetchImages();
+  };
 
-    return (
-        <>
-            <Header />
-            <UploadDialog onUploadComplete={handleUploadComplete} />
-            <Grid images={images} loading={loading} error={error} />
-            <Footer />
-        </>
-    );
+  return (
+    <>
+      <Header />
+      <UploadDialog onUploadComplete={handleUploadComplete} />
+      <Grid images={images} loading={loading} error={error} />
+      <Footer />
+    </>
+  );
 };
 
 export default App;
