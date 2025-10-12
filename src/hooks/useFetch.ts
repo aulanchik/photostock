@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
+import { handleError } from "@/utils/errorHandler";
 import { storage } from "@/firebase/client";
 
 export const useFetch = (path: string = "") => {
@@ -14,15 +15,12 @@ export const useFetch = (path: string = "") => {
         try {
             const storageRef = ref(storage, path);
             const result = await listAll(storageRef);
-
             const urls = await Promise.all(
                 result.items.map((itemRef) => getDownloadURL(itemRef))
             );
-
             setImages(urls);
         } catch (err) {
-            console.error((err as Error).message);
-            setError((err as Error).message);
+            setError(handleError(err));
         } finally {
             setLoading(false);
         }
