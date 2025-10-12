@@ -37,7 +37,6 @@ To run this project locally, follow these steps:
     ```
 
 3.  **Set up Firebase:**
-
     - Create a Firebase project at [firebase.google.com](https://firebase.google.com/).
     - Enable Firebase Storage.
     - In your Firebase project settings, find your web app's configuration details.
@@ -79,6 +78,5 @@ src/
 │   ├── useFetch.ts   # Hook to fetch all images from Firebase Storage
 │   └── useUpload.ts  # Hook to handle file uploads to Firebase Storage
 ├── styles/           # SCSS module files for component styling
-├── utils/            # Utility functions (e.g., for accessing env variables)
 └── App.tsx           # Main application component
 ```
